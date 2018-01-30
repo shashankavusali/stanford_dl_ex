@@ -28,4 +28,3 @@ function [f,g] = linear_regression(theta, X,y)
           g(j) = g(j) + X(j,i)*(theta'*X(:,i) - y(i));
       end
   end
-  disp('Hello');
