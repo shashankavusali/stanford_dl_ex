@@ -7,7 +7,7 @@ function [f,g] = linear_regression_vec(theta, X,y)
   %   y - The target value for each example.  y(j) is the target for example j.
   %
   m=size(X,2);
-  n = size(X,1);
+  
   % initialize objective value and gradient.
   f = 0;
   g = zeros(size(theta));
@@ -17,6 +17,4 @@ function [f,g] = linear_regression_vec(theta, X,y)
   % using vectorized code.  (It will be just a few lines of code!)
   % Store the objective function value in 'f', and the gradient in 'g'.
   %
-  f = 0.5*sum((theta'*X - y).^2);
-  g =  X.*repmat((theta'*X-y), n, 1);
-  g = sum(g,2);
+  f = (theta'*X - y).^2

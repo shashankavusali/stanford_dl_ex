@@ -31,11 +31,12 @@ train.y = data(end,1:400);
 test.X = data(1:end-1,401:end);
 test.y = data(end,401:end);
 
-m=size(train.X,2);
-n=size(train.X,1);
+[n, m]=size(train.X);
+% n=size(train.X,1);
 
 % Initialize the coefficient vector theta to random values.
-theta = rand(n,1);
+theta1 = rand(n,1);
+theta = theta1;
 
 % Run the minFunc optimizer with linear_regression.m as the objective.
 %
@@ -49,17 +50,18 @@ fprintf('Optimization took %f seconds.\n', toc);
 
 % Run minFunc with linear_regression_vec.m as the objective.
 %
-% TODO:  Implement linear regression in linear_regression_vec.m
+% Implement linear regression in linear_regression_vec.m
 % using MATLAB's vectorization features to speed up your code.
 % Compare the running time for your linear_regression.m and
 % linear_regression_vec.m implementations.
 %
 % Uncomment the lines below to run your vectorized code.
 %Re-initialize parameters
-%theta = rand(n,1);
-%tic;
-%theta = minFunc(@linear_regression_vec, theta, options, train.X, train.y);
-%fprintf('Optimization took %f seconds.\n', toc);
+% theta = rand(n,1);
+theta = theta1;
+tic;
+theta = minFunc(@linear_regression_vec, theta, options, train.X, train.y);
+fprintf('Optimization took %f seconds.\n', toc);
 
 % Plot predicted prices and actual prices from training set.
 actual_prices = train.y;
