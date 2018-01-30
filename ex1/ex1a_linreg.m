@@ -35,8 +35,7 @@ test.y = data(end,401:end);
 % n=size(train.X,1);
 
 % Initialize the coefficient vector theta to random values.
-theta1 = rand(n,1);
-theta = theta1;
+theta = rand(n,1);
 
 % Run the minFunc optimizer with linear_regression.m as the objective.
 %
@@ -57,8 +56,7 @@ fprintf('Optimization took %f seconds.\n', toc);
 %
 % Uncomment the lines below to run your vectorized code.
 %Re-initialize parameters
-% theta = rand(n,1);
-theta = theta1;
+theta = rand(n,1);
 tic;
 theta = minFunc(@linear_regression_vec, theta, options, train.X, train.y);
 fprintf('Optimization took %f seconds.\n', toc);
