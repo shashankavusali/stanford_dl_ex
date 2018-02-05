@@ -17,7 +17,14 @@ function [f,g] = softmax_regression(theta, X,y)
   theta=reshape(theta, n, []);
   num_classes=size(theta,2)+1;
   
+  theta = [theta zeros(n,1)];
+  
+  prob = exp(theta'*X);
+  prob_norm = bsxfun(@rdivide, prob, sum(prob,1));
+  indicator = full(sparse(, y, 1));
+  
   % initialize objective value and gradient.
+  f = 0;
   g = zeros(size(theta));
 
   %
@@ -25,15 +32,8 @@ function [f,g] = softmax_regression(theta, X,y)
   % Store the objective function value in 'f', and the gradient in 'g'.
   % Before returning g, make sure you form it back into a vector with g=g(:);
   %
-  theta = [theta zeros(n,1)];
   
-  prob = exp(theta'*X);
-  prob_norm = bsxfun(@rdivide, prob, sum(prob,1));
-  indicator = full(sparse(y, 1:m, 1));
-  f = -sum(sum(log(prob_norm).*indicator));
   
-  for k = 1 : num_classes - 1
-      
-  end
+  
   g=g(:); % make gradient a vector for minFunc
 

@@ -33,7 +33,7 @@ theta = rand(n,num_classes-1)*0.001;
 
 % Call minFunc with the softmax_regression_vec.m file as objective.
 %
-% TODO:  Implement batch softmax regression in the softmax_regression_vec.m
+% Implement batch softmax regression in the softmax_regression_vec.m
 % file using a vectorized implementation.
 %
 tic;
