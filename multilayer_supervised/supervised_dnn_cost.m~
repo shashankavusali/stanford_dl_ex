@@ -70,12 +70,6 @@ for i = 1: numHidden + 1
     weights_cost = weights_cost + 0.5 * ei.lambda * sum(stack{i}.W(:).^2);
 end
 
-cost = cost + weights_cost;
-
-for i = 1 : numHidden + 1
-    gradStack{i}.W = gradStack{i}.W + ei.lambda * stack{i}.W; 
-end
-
 %% reshape gradients into vector
 [grad] = stack2params(gradStack);
 end
