@@ -1,15 +1,9 @@
-function [ cost, grad, pred_prob] = supervised_dnn_cost( theta, ei, data, labels, pred_only)
+function [ cost, grad, pred_prob] = autoencoder( theta, ei, data, labels, pred_only)
 %SPNETCOSTSLAVE Slave cost function for simple phone net
 %   Does all the work of cost / gradient computation
-%   Returns cost broken into cross-entropy, weight norm, and prox reg
+%   Returns cost broken into su, weight norm, and prox reg
 %        components (ceCost, wCost, pCost)
 
-%% default values
-po = false;
-if exist('pred_only','var')
-  po = pred_only;
-end;
-% labels = labels(1:5);
 
 %% reshape into network
 stack = params2stack(theta, ei);
@@ -84,6 +78,7 @@ end
 %% reshape gradients into vector
 [grad] = stack2params(gradStack);
 end
+
 
 
 

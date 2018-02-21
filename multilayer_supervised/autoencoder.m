@@ -1,62 +1,40 @@
-function [ cost, grad, pred_prob] = supervised_dnn_cost( theta, ei, data, labels, pred_only)
+function [ cost, grad, pred_prob] = autoencoder( theta, ei, data, labels, pred_only)
 %SPNETCOSTSLAVE Slave cost function for simple phone net
 %   Does all the work of cost / gradient computation
-%   Returns cost broken into cross-entropy, weight norm, and prox reg
+%   Returns cost broken into sum of squares error, weight norm, and prox reg
 %        components (ceCost, wCost, pCost)
 
-%% default values
-po = false;
-if exist('pred_only','var')
-  po = pred_only;
-end;
-% labels = labels(1:5);
 
 %% reshape into network
 stack = params2stack(theta, ei);
 numHidden = numel(ei.layer_sizes) - 1;
-hAct = cell(numHidden+1, 1);
+numLayers = numel(ei.layer_sizes) + 1;
+hAct = cell(numLayers, 1);
 gradStack = cell(numHidden+1, 1);
-
+nsamples = size(data,2);
 %% forward prop
-outputlayer_idx = numHidden+1;
-n_examples = size(labels, 1);
-n_classes = ei.layer_sizes(outputlayer_idx);
 
 sigmoid = @(x) (1./(1+exp(-x)));
 
 % hAct{1} = data(:,1:5);
 hAct{1} = data;
-for i = 2 : numHidden+1
+for i = 2 : numLayers
     W = stack{i-1}.W;
     B = stack{i-1}.b;
     Z = bsxfun(@plus,W*hAct{i-1},B);
     hAct{i} = sigmoid(Z);
 end
 
-W = stack{outputlayer_idx}.W;
-B = stack{outputlayer_idx}.b;
-Z = bsxfun(@plus, W*hAct{outputlayer_idx},B);
-Z = exp(Z);
-probs = bsxfun(@rdivide, Z,sum(Z,1));
-pred_prob = probs;
-
-%% return here if only predictions desired.
-if po
-  cost = -1; ceCost = -1; wCost = -1; numCorrect = -1;
-  grad = [];  
-  return;
-end;
-
 %% compute cost
 %%% YOUR CODE HERE %%%
-labels = full(sparse(1:n_examples,labels,1, n_examples,n_classes ))';
-ceCost = -sum(sum(labels.*log(probs)));
+ceCost = 0.5*sum(sum((hAct{numLayers} - data).^2))/nsamples;
 
 %% compute gradients using backpropagation
 %%% YOUR CODE HERE %%%
-delta_l = probs - labels;
 
-for i = numel(hAct):-1:1
+delta_l = (hAct{numLayers} - data).*hAct{numLayers}.*(1-hAct{numLayers});
+
+for i = numLayers - 1:-1:1
     gradStack{i}.W = delta_l * hAct{i}';
     gradStack{i}.b = sum(delta_l,2);
     delta_l = (stack{i}.W'*delta_l).*(hAct{i}.*(1-hAct{i})); 
@@ -84,6 +62,7 @@ end
 %% reshape gradients into vector
 [grad] = stack2params(gradStack);
 end
+
 
 
 
