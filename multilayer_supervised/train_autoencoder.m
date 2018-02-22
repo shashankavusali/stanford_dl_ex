@@ -41,11 +41,13 @@ options = [];
 options.display = 'iter';
 options.maxFunEvals = 1e6;
 options.Method = 'lbfgs';
-nsamples = 10000;
+nsamples = 1000;
 % figure; hold on
 %% run training
 [opt_params,opt_value,exitflag,output] = minFunc(@autoencoder,...
-    params,options,ei, data_train(:,1:nsamples), data_train(:,1:nsamples));
+    params,options,ei, data_train(1:ei.input_dim,1:nsamples), data_train(1:ei.input_dim,1:nsamples));
+
+% cost =  autoencoder(opt_params, ei, data_test(1:ei.input_dim,:),data_test(1:ei.input_dim,:));
 
 %% compute accuracy on the test and train set
 % [~, ~, pred] = supervised_dnn_cost( opt_params, ei, data_test, [], true);
