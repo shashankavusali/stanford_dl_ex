@@ -54,7 +54,7 @@ covar = xRot*xRot';
 eig_vals = diag(S);
 variance_fraction = eig_vals./sum(eig_vals);
 cumsum_varance = cumsum(variance_fraction);
-k = find(cumsum_varance >= 0.99,1,'first');
+k = find(cumsum_varance >= 0.999,1,'first');
 %%================================================================
 %% Step 3: Implement PCA with dimension reduction
 %  Now that you have found k, you can reduce the dimension of the data by
@@ -94,7 +94,7 @@ epsilon = 1e-1;
 sqrt_lambda = sqrt(eig_vals(1:k));
 xPCAWhite = bsxfun(@rdivide, xTilda, sqrt_lambda);
 
-imagesc(xPCAWhite*xPCAWhite');
+
 
 %% Step 4b: Check your implementation of PCA whitening 
 %  Check your implementation of PCA whitening with and without regularisation. 
@@ -115,7 +115,7 @@ imagesc(xPCAWhite*xPCAWhite');
 sqrt_lambda_reg = sqrt(eig_vals(1:k) + epsilon);
 xPCAWhiteReg = bsxfun(@rdivide, xTilda, sqrt_lambda_reg);
 
-covar = xPCAWhiteReg*xPCAWhiteReg';
+imagesc(xPCAWhiteReg*xPCAWhiteReg');
 % Visualise the covariance matrix. You should see a red line across the
 % diagonal against a blue background.
 figure('name','Visualisation of covariance matrix');
@@ -128,7 +128,6 @@ imagesc(covar);
 %  that whitening results in, among other things, enhanced edges.
 
 %%% YOUR CODE HERE %%%
-xZCAWhite = U(:,1:k)*xPCAWhite;
 
 % Visualise the data, and compare it to the raw data.
 % You should observe that the whitened images have enhanced edges.
